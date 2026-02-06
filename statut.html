@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status - Manage Bot</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/MZd9HZTC/9a5adb5056aa6a209ba68b5f8ac78389.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7281df;
+            --primary-dark: #5a69cc;
+            --primary-light: #8a97e8;
+            --background: #0a0e1a;
+            --surface: #12161f;
+            --surface-elevated: #1a1f2e;
+            --text-primary: #ffffff;
+            --text-secondary: #a8b3cf;
+            --text-muted: #6b7280;
+            --border: rgba(114, 129, 223, 0.1);
+            --gradient-1: linear-gradient(135deg, #7281df 0%, #a78bfa 100%);
+            --gradient-2: linear-gradient(135deg, #7281df 0%, #5a69cc 100%);
+            --shadow: 0 20px 60px rgba(114, 129, 223, 0.15);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 120px;
+            padding-bottom: 4rem;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #7281df 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-50px, 50px) scale(0.9);
+            }
+        }
+
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(114, 129, 223, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(114, 129, 223, 0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(114, 129, 223, 0.1);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            color: var(--primary-light);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Section */
+        .search-section {
+            position: relative;
+            z-index: 1;
+            padding: 2rem 0 4rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem 3.5rem 1rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(114, 129, 223, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* Clusters Section */
+        .clusters-section {
+            padding: 2rem 0 4rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+        }
+
+        .clusters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .cluster-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cluster-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .cluster-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .cluster-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cluster-card.offline {
+            opacity: 0.6;
+        }
+
+        .cluster-card.offline::before {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .cluster-number {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .cluster-card.offline .cluster-number {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cluster-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .cluster-card.offline .status-dot {
+            background: var(--error);
+        }
+
+        .cluster-guilds {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Details Section */
+        .details-section {
+            display: none;
+            padding: 2rem 0 4rem;
+        }
+
+        .details-section.active {
+            display: block;
+        }
+
+        .details-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .details-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .details-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .close-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .details-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: rgba(114, 129, 223, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .servers-section {
+            margin-top: 2rem;
+        }
+
+        .servers-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .server-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .server-card:hover {
+            background: rgba(114, 129, 223, 0.05);
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .server-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .server-id {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        /* Error State */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-text {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .clusters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .details-card {
+                padding: 1.5rem;
+            }
+
+            .servers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .nav-container {
+                padding: 0 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .clusters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .cluster-number {
+                font-size: 1.5rem;
+            }
+
+            .details-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cluster-card {
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        .cluster-card:nth-child(1) { animation-delay: 0.05s; }
+        .cluster-card:nth-child(2) { animation-delay: 0.1s; }
+        .cluster-card:nth-child(3) { animation-delay: 0.15s; }
+        .cluster-card:nth-child(4) { animation-delay: 0.2s; }
+        .cluster-card:nth-child(5) { animation-delay: 0.25s; }
+        .cluster-card:nth-child(6) { animation-delay: 0.3s; }
+        .cluster-card:nth-child(7) { animation-delay: 0.35s; }
+        .cluster-card:nth-child(8) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="https://i.postimg.cc/MZd9HZTC/9a5adb5056aa6a209ba68b5f8ac78389.png" alt="Manage Logo">
+                <span>Manage</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Accueil</a>
+                <a href="fonctionnalites.html" class="nav-link">Fonctionnalités</a>
+                <a href="equipe.html" class="nav-link">Équipe</a>
+                <a href="status.html" class="nav-link active">Status</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="grid-pattern"></div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-badge">
+                <div class="status-indicator"></div>
+                <span>Statut des clusters en temps réel</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Status</span> Manage
+            </h1>
+            <p class="hero-description">
+                Consultez l'état de tous les clusters et trouvez rapidement votre serveur
+            </p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Rechercher par ID de serveur..."
+                    >
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Chargement des clusters...</div>
+    </div>
+
+    <!-- Clusters Section -->
+    <section id="clustersSection" class="clusters-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Clusters disponibles</h2>
+                <p class="section-description">Cliquez sur un cluster pour voir les détails</p>
+            </div>
+            <div id="clustersGrid" class="clusters-grid"></div>
+        </div>
+    </section>
+
+    <!-- Details Section -->
+    <section id="detailsSection" class="details-section">
+        <div class="container">
+            <div class="details-card">
+                <div class="details-header">
+                    <h2 id="detailsTitle" class="details-title"></h2>
+                    <button class="close-btn" onclick="closeDetails()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        Fermer
+                    </button>
+                </div>
+                <div class="details-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Cluster ID</div>
+                        <div id="statClusterId" class="stat-value">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Serveurs</div>
+                        <div id="statServers" class="stat-value">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Statut</div>
+                        <div id="statStatus" class="stat-value">-</div>
+                    </div>
+                </div>
+                <div class="servers-section">
+                    <h3 class="servers-title">Serveurs sur ce cluster</h3>
+                    <div id="serversGrid" class="servers-grid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const API_URL = 'http://89.187.7.33:25577/api/stats';
+        let clustersData = [];
+        let searchTimeout;
+
+        // Load clusters data
+        async function loadClusters() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('API Error');
+                
+                clustersData = await response.json();
+                renderClusters(clustersData);
+                
+                // Hide loading, show clusters
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('clustersSection').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading clusters:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="error-message">
+                        <div class="error-icon">⚠️</div>
+                        <div class="error-text">Impossible de charger les données. Veuillez réessayer.</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Render clusters grid
+        function renderClusters(clusters) {
+            const grid = document.getElementById('clustersGrid');
+            grid.innerHTML = '';
+            
+            clusters.forEach(cluster => {
+                const card = document.createElement('div');
+                card.className = `cluster-card ${cluster.status}`;
+                card.onclick = () => showDetails(cluster);
+                
+                card.innerHTML = `
+                    <div class="cluster-number">${cluster.id}</div>
+                    <div class="cluster-status">
+                        <div class="status-dot"></div>
+                        <span>${cluster.status === 'online' ? 'En ligne' : 'Hors ligne'}</span>
+                    </div>
+                    <div class="cluster-guilds">${cluster.guildsCount} serveur${cluster.guildsCount > 1 ? 's' : ''}</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Show cluster details
+        function showDetails(cluster) {
+            document.getElementById('detailsTitle').textContent = `Cluster ${cluster.id}`;
+            document.getElementById('statClusterId').textContent = cluster.id;
+            document.getElementById('statServers').textContent = cluster.guildsCount;
+            document.getElementById('statStatus').textContent = cluster.status === 'online' ? 'En ligne' : 'Hors ligne';
+            
+            const serversGrid = document.getElementById('serversGrid');
+            serversGrid.innerHTML = '';
+            
+            if (cluster.guilds && cluster.guilds.length > 0) {
+                cluster.guilds.forEach(guild => {
+                    const serverCard = document.createElement('div');
+                    serverCard.className = 'server-card';
+                    serverCard.innerHTML = `
+                        <div class="server-name" title="${guild.name}">${guild.name}</div>
+                        <div class="server-id">${guild.id}</div>
+                    `;
+                    serversGrid.appendChild(serverCard);
+                });
+            } else {
+                serversGrid.innerHTML = '<p style="color: var(--text-muted); text-align: center;">Aucun serveur disponible</p>';
+            }
+            
+            document.getElementById('detailsSection').classList.add('active');
+            document.getElementById('detailsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Close details
+        function closeDetails() {
+            document.getElementById('detailsSection').classList.remove('active');
+            document.getElementById('clustersSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const searchValue = e.target.value.trim();
+            
+            searchTimeout = setTimeout(() => {
+                if (searchValue === '') {
+                    renderClusters(clustersData);
+                    return;
+                }
+                
+                // Search for server by ID
+                let found = false;
+                for (const cluster of clustersData) {
+                    const guild = cluster.guilds.find(g => g.id === searchValue);
+                    if (guild) {
+                        showDetails(cluster);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found) {
+                    // Filter clusters that might contain the search term
+                    const filtered = clustersData.filter(cluster => 
+                        cluster.guilds.some(g => 
+                            g.id.includes(searchValue) || 
+                            g.name.toLowerCase().includes(searchValue.toLowerCase())
+                        )
+                    );
+                    renderClusters(filtered);
+                }
+            }, 300);
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadClusters, 30000);
+
+        // Initial load
+        loadClusters();
+    </script>
+</body>
+</html>
